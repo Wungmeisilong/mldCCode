@@ -348,7 +348,7 @@ int main()
 }
 #endif
 
-#if 1 //从键盘输入6个学生5门课程的成绩,求每个人的总分与平均分
+#if 0 //从键盘输入6个学生5门课程的成绩,求每个人的总分与平均分
 
 #include <stdio.h>
 int main()
@@ -379,4 +379,249 @@ int main()
         avg = 0.0;
     }
 }
+#endif
+
+#if 0 //定义一个int类型的数组，通过指针逆序输出数组数据
+
+#include <stdio.h>
+
+int main()
+{
+    int a[] = {10,20,30,40,50};
+    int n = sizeof(a) / sizeof(a[0]);
+    int *p = a;
+    printf("原数组元素：\n");
+    for(int i = 0; i < n; i++)
+    {
+        printf("%d ", *(p + i));
+    }
+    printf("\n逆序输出数组元素：\n");
+    for(int i = n-1; i>=0; i--)
+    {
+        printf("%d ",*(p + i));
+    }
+    return 0;
+}
+
+#endif
+
+#if 0 //从键盘输入10个数,用按降序排序并输出。(使用指针实现冒泡排序)
+
+#include <stdio.h>
+
+void bubbleSort(int *p, int size)
+{
+    for(int i = 0; i < size - 1; i++)
+    {
+        for(int j = 0; j < size - i - 1; j++)
+        {
+            if(p[j] < p[j+1])
+            {
+                int t = p[j];
+                p[j] = p[j+1];
+                p[j+1] = t;
+            }
+        }
+    }
+}
+
+int main()
+{
+    int arr[10] = {0};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    printf("请输入10个整数：\n");
+    for(int i = 0; i < 10; i++)
+    {
+        scanf("%d",&arr[i]);
+    }
+    bubbleSort(arr,n);
+    for(int j = 0; j<n; j++)
+    {
+        printf("%d ",arr[j]);
+    }
+    return 0;
+}
+
+#endif
+
+#if 0 //编写求两个数中最大数的函数，并调用该函数求出主函数中两个数中的最大数（不能使用全局变量）
+
+#include <stdio.h>
+
+int  maxNum(int max,int min)
+{
+    return max > min ? max : min;
+}
+int main()
+{
+    int a =30, b = 90;
+    printf("最大值为：%d\n", maxNum(a, b));
+    return 0;
+}
+#endif
+
+#if 0//编写交换两个变量值的函数，并调用该函数交换主函数中两个变量的值（不能使用全局变量传递数据）
+#include <stdio.h>
+
+void swap(int *a,int *b)
+{
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+int main()
+{
+    int a =30, b = 90;
+    printf("交换前：a = %d, b = %d\n", a, b);
+    swap(&a, &b);
+    printf("交换后：a = %d, b = %d\n", a, b);
+    return 0;
+}
+#endif
+
+#if 0//从键盘输入11个数存入一维数组中，将该数组中左半部分与右半部分的值平移交换后重新存入该数组中并输出
+
+#include <stdio.h>
+
+void swapArr(float *p, int size);
+
+int main()
+{
+    float arr[11] = {0.0};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    printf("请输入11个数:\n");
+    for(int i = 0; i < n; i++)
+    {
+        scanf("%f", &arr[i]);
+    }
+    swapArr(arr,n);
+    for(int i = 0; i < n; i++)
+    {
+        printf("%-3g ", arr[i]);
+    }
+    return 0;
+}
+
+void swapArr(float *p, int size)
+{
+    for(int i = 0; i<size/2; i++)
+    {
+        float t = p[i];
+        p[i] = p[size - i - 1];
+        p[size - i - 1] = t;
+    }
+}
+#endif
+
+#if 0 //从键盘输入十个整数存入一维数组中，再按反序输出（要求用指针访问数组元素）
+
+#include <stdio.h>
+
+int main()
+{
+    int arr[10] = {0};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int *p = arr;
+    printf("请输入10个数:\n");
+    for(int i = 0; i < n; i++)
+    {
+        scanf("%d", &arr[i]);
+    }
+    for(int i = n - 1; i >= 0; i--)
+    {
+        printf("%-4d ", p[i]);
+    }
+    return 0;
+}
+
+#endif
+
+#if 0 //从键盘输入十个整数存入一维数组中，使用函数求出它们的和并输出（要求用指针访问数组元素）
+
+#include <stdio.h>
+
+void sumArray(int *p, int size, int *sum)
+{
+    for(int i = 0; i < size; i++)
+    {
+        *sum += p[i];
+    }
+}
+
+int main()
+{
+    int arr[10] = {0};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int *p = arr;
+    int sum = 0;
+    printf("请输入10个数:\n");
+    for(int i = 0; i < n; i++)
+    {
+        scanf("%d", &arr[i]);
+    }
+    sumArray(p, n, &sum);
+    printf("数组元素之和为：%d\n", sum);
+    return 0;
+}
+#endif
+
+#if 1 //给定两个含有n个元素的有序整形数组a和b，求出其共同元素
+
+#include <stdio.h>
+
+void findNum(int *a, int *b, int size)
+{
+    
+    for(int i = 0; i < size; i++)
+    {
+        int l = 0;
+        int r = size - 1;
+        //二分查找
+        while(l <= r)
+        {
+            int mid = l + (r -l) /2;
+            if(b[mid] == a[i])
+            {
+                printf("%d ", a[i]);
+                break;
+            }else if(b[mid] < a[i])
+            {
+                l = mid + 1;
+            }else
+            {
+                r = mid - 1;
+            }
+        }
+            
+    }
+
+}
+
+void findNum1(int *a, int *b, int size)
+{
+    
+    for(int i = 0; i < size; i++)
+    {
+        
+        for(int j = 0; j<size; j++)
+        {
+            if(a[i] == b[j])
+            {
+                printf("%d ", a[i]);
+            }
+        }
+            
+    }
+
+}
+int main()
+{
+    int a[] = {1,3,5,7,9,11,13,15,17,19};
+    int b[] = {2,3,5,7,11,13,17,19,23,29};
+    int n = sizeof(a) / sizeof(a[0]);
+    printf("数组a和b的共同元素有：\n");
+    findNum(a, b, n);
+    return 0;
+}
+
 #endif
