@@ -565,7 +565,7 @@ int main()
 }
 #endif
 
-#if 1 //给定两个含有n个元素的有序整形数组a和b，求出其共同元素
+#if 0 //给定两个含有n个元素的有序整形数组a和b，求出其共同元素
 
 #include <stdio.h>
 
@@ -621,6 +621,193 @@ int main()
     int n = sizeof(a) / sizeof(a[0]);
     printf("数组a和b的共同元素有：\n");
     findNum(a, b, n);
+    return 0;
+}
+
+#endif
+
+#if 0
+//从键盘输入一个百分制分数，将其转化为等级分输出？90以上，等级为A, 80-90,等级为B，70-80,等级为C，60-70，等级为D，60-70，等级为D，60分以下，等级为E
+
+#include <stdio.h>
+
+int main()
+{
+    int score = 0;
+    printf("请输入一个百分制分数：\n");
+    scanf("%d",&score);
+    if(score >= 90 && score <= 100)
+    {
+        printf("等级为A\n");
+    }
+    else if (score >=80 && score < 90)
+    {
+        printf("等级为B\n");
+    }
+    else if(score >=70 && score < 80)
+    {
+        printf("等级为C\n");
+    }
+    else if(score >= 60 && score < 70)
+    {
+        printf("等级为D\n");
+    }
+    else
+    {
+        printf("等级为E\n");
+    }
+    return 0;
+}
+#endif
+
+#if 0 //求1到n之间的奇数的阶乘和
+
+#include <stdio.h>
+int factorial(int num);
+
+int main()
+{
+    int n = 0;
+    printf("请输入一个正整数n：\n");
+    scanf("%d",&n);
+    int sum = 0;
+    for(int i = 1; i <= n; i +=2)
+    {
+        sum += factorial(i);
+    }
+    printf("1到%d之间奇数的阶乘和为：%d\n", n, sum);
+    return 0;
+
+}
+
+int factorial(int n)
+{
+    if( n == 1)
+        return 1;
+    return n * factorial(n -1);
+}
+#endif
+
+#if 0 //编写函数 fun 计算 m ～ n 之和？
+
+#include <stdio.h>
+
+void fun(int *m, int n)
+{
+    for(int i = *m; i <= n; i++)
+    {
+        *m += i;
+    }
+}
+
+int main()
+{
+    int m = 1, n = 100;
+    fun(&m,n);
+    printf("%d到%d之间的和为：%d\n",1, n, m);
+    return 0;
+
+}
+#endif
+
+#if 0 //从键盘输入一个正整数（位数不限），将该数前后倒置后输出。123456---->654321
+
+#include <stdio.h>
+#include <string.h>
+int main()
+{
+    char str[100];
+    printf("请输入一个正整数：\n");
+    scanf("%s",str);
+    int len = strlen(str);
+    for(int i = 0; i < len /2; i++)
+    {
+        char temp = str[i];
+        str[i] = str[len - i -1];
+        str[len -i -1] = temp;
+    }
+    printf("倒置后的数为：%s\n", str);
+    return 0;
+}
+
+#endif
+
+#if 0 //编写一个函数，实现字符串的翻转。例如：输入abcdef，输出fedcba
+
+#include <stdio.h>
+#include <string.h>
+void reverseString(char* str,int size)
+{
+    int l = 0;
+    int r = size -1;
+    while( l < r)
+    {
+        char temp = str[l];
+        str[l] = str[r];
+        str[r] = temp;
+        l++;
+        r--;
+    }
+}
+
+int main()
+{
+    char str[100];
+    printf("请输入一个字符串：\n");
+    scanf("%s",str);
+    int n = strlen(str);
+    reverseString(str,n);
+    printf("翻转后的字符串是：%s\n", str);
+}
+#endif
+
+#if 0 /*从键盘输入10个整数，输出这10个数中仅出现一次的数。
+        如输入：12，36，72，36，87，99，87，87，12，35
+        则输出：72，99，35*/
+
+#include <stdio.h>
+
+int main()
+{
+    int arr[10] = {0};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    printf("请输入10个整数：\n");
+    for(int i = 0; i < n; i++)
+    {
+        scanf("%d",arr + i);
+    }
+
+    for(int i = 0; i < n; i++)
+    {
+        int count  =0;
+        for(int j = 0; j < n; j++)
+        {
+            if( i != j && arr[i] == arr[j])
+            {
+                count++;
+                break;
+            }
+        }
+        if(count == 0)
+        {
+            printf("%d ", arr[i]);
+        }
+    }
+    return 0;
+}
+#endif
+
+#if 1 //5>=3>=2? 结果为真
+
+#include <stdio.h>
+
+int main()
+{
+    int a = 5;
+    int b = 3;
+    int c = 2;
+    printf("%d",a >= b >= c);
+    
     return 0;
 }
 
