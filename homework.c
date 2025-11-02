@@ -507,8 +507,8 @@ void swapArr(float *p, int size)
     for(int i = 0; i<size/2; i++)
     {
         float t = p[i];
-        p[i] = p[size - i - 1];
-        p[size - i - 1] = t;
+        p[i] = p[i + (size / 2) + 1];
+        p[i + (size / 2) + 1] = t;
     }
 }
 #endif
@@ -565,7 +565,7 @@ int main()
 }
 #endif
 
-#if 0 //给定两个含有n个元素的有序整形数组a和b，求出其共同元素
+#if 1 //给定两个含有n个元素的有序整形数组a和b，求出其共同元素
 
 #include <stdio.h>
 
@@ -608,11 +608,30 @@ void findNum1(int *a, int *b, int size)
             if(a[i] == b[j])
             {
                 printf("%d ", a[i]);
+                break;
             }
         }
             
     }
 
+}
+void findNum2(int *a, int *b, int size)
+{
+    int *p = a;
+    int *q = b;
+    while(p < a + size && q < b + size)
+    {
+        if(*p == *q)
+        {
+            printf("%d ",*p);
+            q++;p++;
+        }else if (*p < *q)
+        {
+            p++;
+        }else{
+            q++;
+        }
+    }
 }
 int main()
 {
@@ -620,7 +639,7 @@ int main()
     int b[] = {2,3,5,7,11,13,17,19,23,29};
     int n = sizeof(a) / sizeof(a[0]);
     printf("数组a和b的共同元素有：\n");
-    findNum(a, b, n);
+    findNum2(a, b, n);
     return 0;
 }
 
@@ -797,7 +816,7 @@ int main()
 }
 #endif
 
-#if 1 //5>=3>=2? 结果为真
+#if 0 //5>=3>=2? 结果为真
 
 #include <stdio.h>
 
