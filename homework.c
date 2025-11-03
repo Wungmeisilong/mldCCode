@@ -565,7 +565,7 @@ int main()
 }
 #endif
 
-#if 1 //给定两个含有n个元素的有序整形数组a和b，求出其共同元素
+#if 0 //给定两个含有n个元素的有序整形数组a和b，求出其共同元素
 
 #include <stdio.h>
 
@@ -829,5 +829,306 @@ int main()
     
     return 0;
 }
+
+#endif
+
+#if 0 /*一般而言，兔子在出生两个月后，就有繁殖能力，一对兔子每个月能生出一对小兔子来。如果所有兔子都不死，那么一年以后可以繁殖多少对兔子？（通过递归实现）*/
+
+#include <stdio.h>
+int rabbitPairs(int m)//n月后可以繁殖兔子的对数
+{
+    if(m == 1 || m == 2)
+        return 1;
+    return rabbitPairs(m - 1) + rabbitPairs(m - 2);
+}
+int main()
+{
+    int months = 5;
+    int totalPairs = rabbitPairs(months);
+    if(totalPairs <= 0)
+    {
+        printf("输入月份不正确！\n");
+        return -1;
+    }
+    printf("一年后兔子的对数为：%d\n", totalPairs);
+    return 0;
+}
+#endif //homework.c
+
+#if 0 /*用户输入一行字符串，统计此字符串中每一个小写字母出现的次数
+
+input a string: abckckchcAD
+
+a:1
+
+b:1
+
+c:4
+
+h:1
+
+k:2*/
+
+#include <stdio.h>
+
+int main()
+{
+    char str[100];
+    printf("请输入一行小写字符串：\n");
+    scanf("%s",str);
+    int counts[26] = {0};
+    for(int i =0; str[i] != '\0'; i++)
+    {
+        if(str[i] >= 'a' && str[i] <= 'z')
+        {
+            counts[str[i] - 'a']++;
+        }
+    }
+    for(int i = 0; i < 26; i++)
+    {
+        if(counts[i] != 0)
+        {
+            printf("%c:%d\n",'a' + i, counts[i]);
+        }
+    }
+    return 0;
+}
+#endif
+
+#if 0 /*用双重循环打印如下图形。
+
+
+       A
+      BBB
+     CCCCC
+    DDDDDDD
+
+
+输入行数，如果大于26行，则只显示26行*/
+#include <stdio.h>
+
+void print_pattern(int n){
+    if(n>26)
+    {
+        n = 26;
+    }else if(n <=0)
+    {
+        printf("输入行数不正确！\n");
+        return;
+    }
+    if(n >= 1)
+    {
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < n - i - 1; j++)
+            {
+                printf(" ");
+            }
+            for(int k = 0; k < 2 * i + 1; k++)
+            {
+                printf("%c",'A' + i);
+            }
+            printf("\n");
+        }
+    }
+}
+int main()
+{
+    int rows = 0;
+    printf("请输入行数：\n");
+    scanf("%d",&rows);
+    print_pattern(rows);
+    return 0;
+}
+
+#endif
+
+#if 0 //编写一个通用函数，实现加减乘除运算
+
+#include <stdio.h>
+
+int add(int a, int b) { return a + b;}
+int sub(int a, int b) { return a - b;}
+int mul(int a, int b) { return a * b;}
+int div(int a, int b) { 
+    if(b == 0){ 
+        printf(" 除数不能为零！！！"); 
+        return 0;
+    } 
+    return a / b;
+}
+
+int print_re(int a, char op, int b)
+{
+    int (*ari)(int a, int b) = NULL;
+
+    switch(op)
+    {
+        case '+':
+            ari = add;
+            break;
+        case '-':
+            ari = sub;
+            break;
+        case '*':
+            ari = mul;
+            break;
+        case '/':
+            ari = div;
+            break;
+        default: 
+            printf("错误运算符！！");
+            return 0;
+    }
+    return ari(a,b);
+}
+int main()
+{
+    int m_a = 12;
+    int m_b = 13;
+    int a = print_re(m_a,'-',m_b);
+    printf("%d\n",a);
+    return 0;
+}
+#endif
+
+#if 0//使用递归实现:求斐波那契数列的第n项值
+#include <stdio.h>
+int fibonacci(int n)
+{
+    if(n == 0) return 0;
+    else if(n == 1) return 1;
+    else return fibonacci(n -1) + fibonacci(n - 2);
+}
+int main()
+{
+    int n = 0;
+    printf("请斐波那契数列的第n项：\n");
+    scanf("%d",&n);
+    printf("斐波那契数列的第%d项为：%d\n",n,fibonacci(n-1));
+    return 0;
+}
+
+#endif
+
+#if 0 //编写求两个整数最大公约数的函数，并调用此函数求两个整数的最大公约数和最小公倍数。
+//最大公约数：两个数的公约数中最大的数
+//最小公倍数：两个数的公倍数中最小的数
+
+#include <stdio.h>
+
+void gcd(int a, int b,int *Num1,int *Num2)
+{
+    if(a == b ) 
+    {
+        *Num1 = a;
+        *Num2 = a;
+    }
+    else{
+        int max = a > b ? a : b;
+        int min = a < b ? a : b;
+        while(max % min != 0)
+        {
+            int t = max % min;
+            max = min;
+            min = t;
+        }
+        *Num1 = min;
+
+        *Num2 = a * b / min;
+    }
+}
+int main()
+{
+    int a = 12;
+    int b = 6;
+    int num1 = 0;
+    int num2 = 0;
+    gcd(a,b,&num1,&num2);
+    printf("%d和%d最大公约数为：%d\n",a,b,num1);
+    printf("%d和%d最小公倍数为：%d\n",a,b,num2);
+    return 0;
+}
+#endif
+
+#if 0 //从键盘输入的一行字符，统计其中单词的个数。假设单词之间以非英文字符为分隔
+
+#include <stdio.h>
+#include <ctype.h>
+int count_word(char *str)
+{
+    int counts = 0;
+    int in_word = 0;
+    while(*str)
+    {
+        if((*str >= 'a' && *str <= 'z') || (*str >= 'A' && *str <= 'Z'))
+        {
+            if(!in_word)
+            {
+                counts++;
+                in_word = 1;
+            }
+        }else
+        {
+            in_word = 0;
+        }
+        str++;
+    }
+    return counts;
+}
+int main()
+{
+    char str[100] = {0};
+    printf("请输入一行字符：\n");
+    gets(str);
+    printf("单词个数为：%d\n",count_word(str));
+    return 0;
+}
+#endif
+
+#if 0 //编写一个函数，分别统计字符串中各元音字母的出现次数（A，E，I，O，U）(大小写不区分)。
+//要求在主函数中输入一个字符串，统计后的结果在主函数中输出。例如输入”this is a student”,则输出”11201”
+#include <stdio.h>
+
+void count_vowel(char *str,int *A,int *E,int *I,int *O,int *U)
+{
+    while (*str)
+    {
+        /* code */
+        if(*str == 'a' || *str == 'A') (*A)++;
+        else if(*str == 'e' || *str == 'E') (*E)++;
+        else if(*str == 'i' || *str == 'I') (*I)++;
+        else if(*str == 'o' || *str == 'O') (*O)++;
+        else if(*str == 'u' || *str == 'U') (*U)++;
+        str++;
+    }
+    
+}
+
+int main()
+{
+    char str[100] = {0};
+    int A = 0,E = 0,I = 0,O = 0,U = 0;
+    printf("请输入一行字符：\n");
+    gets(str);
+    count_vowel(str,&A,&E,&I,&O,&U);
+    printf("%d%d%d%d%d\n",A,E,I,O,U);
+    return 0;
+}
+#endif
+
+#if 1/*存在函数，原型为：int* fun(char*,float);
+
+1,定义一个函数，该函数的形参为fun函数类型的指针
+
+2,定义一个函数，该函数的返回值为fun函数类型的指针
+
+3,定义fun函数类型的指针数组*/
+#include <stdio.h>
+
+int* fun(char *str,float f);
+void func1(int* (*p)(char *, float));
+int* (*fun2(void))(char*,float);
+int* (*p[2])(char*, float) = {NULL,NULL};
 
 #endif
