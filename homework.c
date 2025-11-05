@@ -1118,11 +1118,8 @@ int main()
 #endif
 
 #if 1/*存在函数，原型为：int* fun(char*,float);
-
 1,定义一个函数，该函数的形参为fun函数类型的指针
-
 2,定义一个函数，该函数的返回值为fun函数类型的指针
-
 3,定义fun函数类型的指针数组*/
 #include <stdio.h>
 
