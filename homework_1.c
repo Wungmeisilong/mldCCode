@@ -40,7 +40,7 @@ int* create_array(int n)
 void test1()
 {
     int *p = create_array(10);
-    
+    if(p == NULL) return;//安全检查
     for(int i = 0; i < 10; i++)
     {
         p[i] = i*10;
@@ -49,6 +49,8 @@ void test1()
     {
         printf("%d ",p[i]);
     }
+    free(p);//释放内存
+    p = NULL;//避免野指针
 }
 
 int add(int a, int b)
@@ -74,7 +76,9 @@ void test2()
     {
         func_ptr = multiply;
         printf("%d\n",func_ptr(a,b));
-    }
+    }else{
+        printf("输入操作符%c有误，请重新输入！！！\n",op);
+    } 
 }
 
 void calculate(int a, int b, int (*operation)(int, int))
@@ -89,15 +93,13 @@ void test3()
     char op;
     printf("按照1 + 2输入数字与运算符：\n");
     scanf("%d %c %d",&a,&op,&b);
-    if(op == '+')
-    {
-        func_ptr = add;
-        calculate(a,b,func_ptr);
-    }else if(op == '*')
-    {
-        func_ptr = multiply;
-        calculate(a,b,func_ptr);
+    if(op == '+') func_ptr = add;
+    else if(op == '*') func_ptr = multiply;
+    else {
+        printf("输入操作符%c有误，请重新输入！！！\n",op);
+        return;
     }
+    calculate(a,b,func_ptr);
 }
 int *getCount()
 {
@@ -108,12 +110,11 @@ int *getCount()
 
 void test4()
 {
-    int *p = NULL;
     while(count<3)
     {
-        p = getCount();
+        getCount();
     }
-    printf("%d\n",*p);
+    printf("%d\n",count);
 }
 
 int add1(int a,int b)
@@ -143,5 +144,11 @@ void test5()
     printf("输入两个数字和运算符：(例如：1 2 0)\n");
     printf("0:+\n1:-\n2:*\n");
     scanf("%d %d %d",&a,&b,&n);
+    if(n < 0 || n > 2)
+    {
+        printf("输入运算符有误，请重新输入！！！\n");
+
+        return;
+    }
     calculate1(a,b,n,ops);
 }
