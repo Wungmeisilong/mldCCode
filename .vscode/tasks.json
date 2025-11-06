@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": 
+    [
+        {
+            "label": "C/C++: gcc.exe build active file",
+            "type": "process",
+            "command": "E:/ProgramFiles/mingw64/bin/gcc.exe",  //# 改成你自己的路径
+            "args":
+            [
+                "-fdiagnostics-color=always",
+                "-g", 
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "options": 
+            {
+                "cwd": "E:/ProgramFiles/mingw64/bin"  //# 改成你自己的路径
+            },
+            "group": "build",
+            "detail": "compiler: E:/ProgramFiles/mingw64/bin/gcc.exe",  //# 改成你自己的路径 
+            "problemMatcher": "$gcc"
+        }
+    ]
+}

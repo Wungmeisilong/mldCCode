@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+ 
+    {
+      "name": "C/C++ Runner: Debug Session",        
+      "type": "cppdbg",                              
+      "request": "launch",                           
+      "args": [],                                   
+      "stopAtEntry": false,                          
+      "externalConsole": false,                      
+      "cwd": "${fileDirname}",    
+      "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",   
+      
+      
+      "MIMode": "gdb",
+      "miDebuggerPath": "E:/ProgramFiles/mingw64/bin/gdb.exe",  //# 改成你自己的调试器gdb全路径
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

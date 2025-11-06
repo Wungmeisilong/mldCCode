@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "studentAge.C": "cpp",
+        "ostream": "cpp",
+        "string": "cpp",
+        "stdio.h": "c",
+        "iostream": "cpp",
+        "typeinfo": "cpp"
+    }
+}
