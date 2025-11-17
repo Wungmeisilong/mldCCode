@@ -334,3 +334,190 @@ int main()
     return 0;
 }
 #endif
+
+#if 0 
+/*
+动态分配一个包含5个整数的数组，给数组赋值1,3,5,7,9并打印所有元素，最后释放内存。
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int *arr = NULL;
+    int size = 5;
+    arr = (int *)malloc(sizeof(int) * size);
+    if(NULL == arr)
+    {
+        perror("malloc failed");
+        return 1;
+    }
+    for(int i = 0; i < size; i++)
+    {
+        *(arr + i) = 2*i +1;
+    }
+
+    for(int i = 0; i<size; i++)
+    {
+        printf("%d ",*(arr + i));
+    }
+    free(arr);
+    arr = NULL;
+    return 0;
+}
+#endif
+
+#if 1
+/*
+动态分配一个包含3个整数的数组并赋值，使用realloc将数组扩容到5个元素，添加新元素后打印所有元素，最后释放内存
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int *arr = NULL;
+    int size = 3;
+    int new_size = 5;
+
+    arr = (int*)malloc(sizeof(int) * size);
+    if(NULL == arr)
+    {
+        perror("malloc failed");
+        return 1;
+    }
+    for(int i = 0; i < size; i++)
+    {
+        *(arr + i) = 2*i +1; //另一种写法：arr[i] = 2*i + 1;
+    }
+    int *temp = realloc(arr,sizeof(int) * new_size);
+    if(temp == NULL)
+    {
+        perror("realloc failed");
+        free(arr);
+        return 1;
+    }
+    arr = temp;
+    for(int i = 0; i < new_size; i++)
+    {
+        *(arr + i) = 2*i +1;
+    }
+    printf("新元素的值为：\n");
+    for(int i = 0; i < new_size; i++)
+    {
+        printf("arr[%d] = %d \n", i, arr[i]);
+    }
+    free(arr);
+    arr = NULL;
+    temp = NULL;
+    return 0;
+}
+#endif
+
+#if 0
+/*
+动态分配足够的内存来存储用户输入的字符串，将用户输入的字符串复制到动态分配的内存中，打印该字符串后释放内存。
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int main()
+{
+    char str[100] = {0};
+    char *str1 = NULL;
+    printf("请输入字符:");
+
+    /*重点：fgets(stdin)的意思是从标准输入流中读取字符串，注意该操作会读取'\n'，所以需要去掉*/
+    if(fgets(str,sizeof(str),stdin) != NULL)
+    {
+        //移除换行符
+        int len = strlen(str);
+        if(len > 0 && str[len-1] == '\n')
+        {
+            str[len - 1] = '\0';
+            len--;
+        }
+        str1 = (char*)malloc(sizeof(char) * (len + 1));
+
+        if(str1 == NULL)
+        {
+            perror("malloc failed");
+            return 1;
+        }
+
+        strcpy(str1,str);
+        printf("str1:%s\n",str1);
+        free(str1);
+        str1 = NULL;
+    }else {
+        perror("fgets failed");
+        return 1;
+    }
+    
+    return 0;
+}
+#endif
+
+#if 0
+
+/*
+动态创建包含3个学生结构体的数组，给每个学生赋值并打印所有学生信息，最后释放内存。
+*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX_NAME_LENGH 20
+#define STUDENT_NUM 3
+
+typedef struct Student
+{
+    char name[MAX_NAME_LENGH];
+    int age;
+    float score;
+}Student;
+
+void inputStudentInfo(Student *s, int count)
+{
+    printf("请输入学生信息:\n");
+    for(int i = 0; i < count; i++)
+    {
+        printf("请输入第%d个学生姓名:",i+1);
+        scanf("%s",s[i].name);
+        printf("请输入第%d个学生年龄:",i+1);
+        scanf("%d",&s[i].age);
+        printf("请输入第%d个学生成绩:",i+1);
+        scanf("%f",&s[i].score);
+    }
+
+}
+void printStuentInfo(Student *s, int count)
+{
+    printf("学生信息:\n");
+    for(int i = 0; i < count; i++)
+    {
+        printf("第%d个学生的信息：\n",i+1);
+        printf("  姓名：%s\n",s[i].name);
+        printf("  年龄：%d\n",s[i].age);
+        printf("  成绩：%g\n",s[i].score);
+    }
+}
+
+int main()
+{
+    Student * s = (Student*)malloc(sizeof(Student) * STUDENT_NUM);
+    if(s == NULL)
+    {
+        perror("malloc failed");
+        return 1;
+    }
+    inputStudentInfo(s,STUDENT_NUM);
+    printStuentInfo(s,STUDENT_NUM);
+    free(s);
+    s = NULL;
+
+    return 0;
+}
+
+#endif
