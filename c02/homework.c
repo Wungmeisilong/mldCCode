@@ -367,7 +367,7 @@ int main()
 }
 #endif
 
-#if 1
+#if 0
 /*
 动态分配一个包含3个整数的数组并赋值，使用realloc将数组扩容到5个元素，添加新元素后打印所有元素，最后释放内存
 */
@@ -520,4 +520,166 @@ int main()
     return 0;
 }
 
+#endif
+
+#if 0
+/*
+定义学员结构体包括：姓名，学号(int)，编写代码
+
+a) 创建3个学员数组并键盘录入学生姓名和学号；
+
+b) 学号重复，重新录入；
+
+c) 打印所有学员信息。
+*/
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_NAME_LENGH 20
+#define STUDENT_NUM 3
+typedef struct Student{
+    int id;
+    char name[MAX_NAME_LENGH];
+}Stud;
+
+int checkStudentId(Stud *s, int count, int id)
+{
+
+    for(int i = 0; i < count; i++)
+    {
+        if(s[i].id == id)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+void inputStudentInfo(Stud *s, int count)
+{
+    printf("请输入学生信息：\n");
+    int i = 0;
+    while(i < count)
+    {
+        printf("第%d个学生\n学号:",i+1);
+        scanf("%d",&s[i].id);
+        printf("姓名:");
+        scanf("%s",s[i].name);
+        if(i != 0)
+        {
+            int ret = checkStudentId(s,i,s[i].id);
+            if( ret == 1)
+            {
+                printf("学号重复，请重新输入！\n");
+                continue;
+            }
+        }
+        i++;
+        
+    }
+}
+
+
+void printfStudentInfo(Stud *s, int count)
+{
+    printf("学生信息：\n");
+    printf("序号\t姓名\t学号\n");
+    printf("-----------------------------------\n");
+    for(int i = 0; i < count; i++)
+    {
+        
+        printf("%d\t%s\t%d\n",i+1,s[i].name,s[i].id);
+        
+    }
+    printf("-----------------------------------\n");
+}
+
+int main()
+{
+    Stud *s = (Stud*)malloc(sizeof(Stud) * STUDENT_NUM);
+    if(s == NULL)
+    {
+        perror("malloc failed");
+        return 1;
+    }
+    inputStudentInfo(s,STUDENT_NUM);
+    printfStudentInfo(s,STUDENT_NUM);
+
+    free(s);
+    s = NULL;
+
+    return 0;
+}
+#endif
+
+#if 0
+/*
+现有学生结构体(id,name,score),在堆上定义3个结构体元素并初始化，并将学员信息遍历打印；然
+
+后使用realloc进行堆空间扩展5个元素，然后输出
+*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX_NAME_LENGH 20
+#define STUDENT_NUM 3
+typedef struct Student{
+    int id;
+    char name[MAX_NAME_LENGH];
+    float score;
+}Stud;
+
+void printfStudentInfo(Stud *s, int count)
+{
+    printf("学生信息：\n");
+    printf("学号\t姓名\t分数\n");
+    printf("-----------------------------------\n");
+    for(int i = 0; i < count; i++)
+    {
+        printf("%d\t%s\t%g\n",s[i].id,s[i].name,s[i].score);
+    }
+    printf("-----------------------------------\n");
+}
+
+int main()
+{
+    Stud *s = (Stud*)malloc(sizeof(Stud) * STUDENT_NUM);
+    if(s == NULL)
+    {
+        perror("malloc failed");
+        return 1;
+    }
+    int id[] = {1001,1002,1003};
+    char *pname[STUDENT_NUM]= {"张三","李四","王五"};
+    float score[] = {90.0,80.0,70.0};
+    for(int i = 0; i < STUDENT_NUM; i++)
+    {
+        s[i].id = id[i];
+        strcpy(s[i].name,pname[i]);
+        s[i].score = score[i];
+    }
+
+    printfStudentInfo(s,STUDENT_NUM);
+    Stud *s1 = (Stud*)realloc(s,sizeof(Stud) * (STUDENT_NUM + 5));
+    if(s1 == NULL)
+    {
+        perror("realloc failed");
+        free(s);
+        s = NULL;
+        return 1;
+    }
+    s = s1;
+    int id1[] = {1004,1005,1006,1007,1008};
+    char *p1name[]= {"赵六","孙七","周八","吴九","郑十"};
+    float score1[] = {90.0,80.0,70.0,60.0,50.0};
+    for(int i = 0; i < 5; i++)
+    {
+        s[i+STUDENT_NUM].id = id1[i];
+        strcpy(s[i+STUDENT_NUM].name,p1name[i]);
+        s[i+STUDENT_NUM].score = score1[i];
+    }
+    printfStudentInfo(s,STUDENT_NUM + 5);
+
+    free(s);
+    s = NULL;
+    return 0;
+}
 #endif

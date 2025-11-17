@@ -1,5 +1,6 @@
 #include <stdio.h>
-
+#include <stdlib.h>
+#include <string.h>
 //文件字符读写
 void fCharRead(const char *fileName)
 {
@@ -148,6 +149,252 @@ void dBlockRead(const char* fileName)
     printf("name:%s, age:%d, score:%d\n",stud.name,stud.age,stud.score);
     fclose(fp);
 }
+
+//链表的创建
+
+typedef struct Node{
+    int data;
+    struct Node *next;
+}Node, *LinkList;
+
+Node* createLinkList()
+{
+    Node* header = (Node*)malloc(sizeof(Node));
+    if(header == NULL)
+    {
+        perror("头节点创建失败！！");
+        return NULL;
+    }
+    header->next = NULL;
+    return header;
+}
+
+
+//1.添加节点
+void pushLinkListNode(LinkList plinkList, int data)
+{
+    Node* current = plinkList;
+    //1.尾部插入，先找到最后一个节点
+    while(current->next != NULL)
+    {
+        current = current->next;
+    }
+
+    //2.创建新节点
+    Node* NewNode = (Node*)malloc(sizeof(Node));
+    if(NewNode == NULL)
+    {
+        perror("内存分配失败！！");
+        return;
+    }
+    NewNode->data = data;
+    NewNode->next = NULL;
+
+    current->next = NewNode;
+    return;
+}
+//2.根据值插入到链表中
+void insertLinkListByValue(LinkList linkList,int data, int NewData)
+{
+    while(linkList->next != NULL)
+    {
+        if(linkList->next->data == data)
+        {
+            break;
+        }
+        linkList = linkList->next;
+    }
+
+    if(linkList->next == NULL)
+    {
+        printf("链表中没有找到%d\n",data);
+        return;
+    }
+
+    //找到节点的情况：
+    Node *pnewNode = (Node *)calloc(1,sizeof(Node));
+    if(pnewNode == NULL)
+    {
+        perror("内存分配失败！！");
+        return;
+    }
+
+    //创建节点
+    pnewNode->data = NewData;
+    pnewNode->next = NULL;
+    //插入新位置
+    pnewNode->next = linkList->next;
+    linkList->next = pnewNode;
+    printf("添加节点%d成功！！\n",NewData);
+    return;
+}
+
+//3.删除尾节点
+void popLinkListTail(LinkList LinkList)
+{
+    while(LinkList->next != NULL)
+    {
+        if(LinkList->next->next == NULL)
+        {
+            break;
+        }
+        LinkList = LinkList->next;
+    }
+
+    if(LinkList->next == NULL)
+    {
+        printf("链表为空\n");
+        return;
+    }
+    //删除节点，用一个指针指向
+    Node *p = LinkList->next;
+    free(p);
+    p = NULL;
+
+    LinkList->next = NULL;
+    printf("删除为节点成功！！\n");
+    return;
+
+}
+
+//4.删除任意节点
+void deleteLinkListByvalue(LinkList linkList,int data)
+{
+    while(linkList->next != NULL)
+    {
+        if(linkList->next->data == data)
+        {
+            break;
+        }
+        linkList = linkList->next;
+    }
+
+    if(linkList->next == NULL)
+    {
+        printf("链表中没有找到%d\n",data);
+        return;
+    }
+    //找到节点的情况：
+    Node *p = linkList->next;
+    linkList->next = p->next->next;
+    free(p);
+    p = NULL;
+
+    printf("任意删除节点成功\n");
+    return;
+}
+
+//5.任意查找
+void findLinkListByValue(LinkList linkList,int data)
+{
+    while(linkList->next != NULL)
+    {
+        if(linkList->next->data == data)
+        {
+            break;
+        }
+        linkList = linkList->next;
+    }
+
+    if(linkList->next == NULL)
+    {
+        printf("链表中没有找到%d\n",data);
+        return;
+    }
+    //找到节点的情况：
+    printf("找到节点%d\n",linkList->next->data);
+    return;
+}
+
+//6.修改链表中的值
+void modifyLinkListByValue(LinkList linkList, int data, int newData)
+{
+    while(linkList->next != NULL)
+    {
+        if(linkList->next->data == data)
+        {
+            linkList->next->data = newData;
+            printf("修改节点成功\n");
+            return;
+        }
+        linkList = linkList->next;
+    }
+
+    if(linkList->next == NULL)
+        printf("链表中没有找到%d\n",data);
+    
+    printf("修改节点失败\n");
+    return;
+}
+
+//7.打印链表
+void printfLinkList(LinkList plinkList)
+{
+    //判断是否销毁
+    if(plinkList == NULL)
+    {
+        printf("链表已被销毁！！");
+        return;
+    }
+
+    //判断链表是否为空
+    Node* current = plinkList->next;
+    if(current == NULL)
+    {
+        printf("链表为空！！");
+        return;
+    }
+
+    while(current != NULL)
+    {
+        printf("%d",current->data);
+        if(current->next != NULL) printf("\t");
+        current = current->next;
+    }
+    printf("\n");
+    return;
+}
+//8.销毁链表
+void destroyLinkList(LinkList pheader)
+{
+    Node* temp = NULL;
+    while(pheader != NULL)
+    {
+        temp = pheader;
+        pheader = pheader->next;
+        free(temp);
+        temp = NULL;
+    }
+}
+
+void testLinkList()
+{
+    Node* pheader = NULL;
+    pheader = createLinkList();
+    pushLinkListNode(pheader, 20);
+    pushLinkListNode(pheader, 30);
+    pushLinkListNode(pheader, 40);
+    pushLinkListNode(pheader, 900);
+    pushLinkListNode(pheader, 67);
+    printfLinkList(pheader);
+
+    insertLinkListByValue(pheader,30,70);
+    printfLinkList(pheader);
+
+    popLinkListTail(pheader);
+    printfLinkList(pheader);
+
+    deleteLinkListByvalue(pheader,70);
+    printfLinkList(pheader);
+
+    findLinkListByValue(pheader,900);
+    printfLinkList(pheader);
+
+    modifyLinkListByValue(pheader, 900, 300);
+    printfLinkList(pheader);
+
+    destroyLinkList(pheader);
+}
 int main()
 {
     //fCharWrite("fchar.txt");
@@ -170,8 +417,9 @@ int main()
 
     // fFormatWrite("fformat.txt",stud,count);
     // fFormatRead("fformat.txt",count);
-    Stud std = {"zhangsan",20,90};
-    dBlockWrite("dblock.txt",&std);
-    dBlockRead("dblock.txt");
+    //Stud std = {"zhangsan",20,90};
+    //dBlockWrite("dblock.txt",&std);
+    //dBlockRead("dblock.txt");
+    testLinkList();
     return 0;
 }
