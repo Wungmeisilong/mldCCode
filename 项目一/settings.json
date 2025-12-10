@@ -1,0 +1,15 @@
+{
+    "C_Cpp.errorSquiggles": "disabled",                  //错误波浪线：VS Code会在代码下方显示红色波浪线来标记语法错误、类型错误等, disabled：禁用C/C++扩展的错误波浪线功能
+    "makefile.configureOnOpen": false,                 //自动配置：VS Code的Makefile扩展会在打开工作区时自动分析Makefile,  false：禁用自动配置功能(避免冲突：如果项目不使用Makefile构建系统，避免不必要的分析)
+    "files.associations": {                                       //文件关联：告诉VS Code如何识别和处理特定文件
+        "typeinfo": "c"                                             //typeinfo：这是一个特定的文件名模式,  "c"：将匹配的文件当作C语言文件处理
+    }
+}
+
+
+
+/*
+	tasks.json：负责编译，会显示编译错误
+	launch.json：负责调试
+	settings.json：优化编辑体验，减少干扰
+*/

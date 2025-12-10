@@ -683,3 +683,234 @@ int main()
     return 0;
 }
 #endif
+
+#if 0
+
+/*
+编写函数在链表中查找特定值是否存在，如果存在返回1，否则返回0。
+*/
+#include <stdio.h>
+typedef struct Node{
+    int data;
+    struct Node *next;
+}Node;
+
+int findLinkListByValue(Node* pheader, int value)
+{
+    Node* current = pheader;
+    while(current->next != NULL)
+    {
+        if(current->next->data == value)
+        {
+            return 1;
+        }
+        current = current->next;
+    }
+    if(current == NULL) {
+        printf("链表为空！！");
+    }
+    return 0;
+}
+#endif
+
+#if 1
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node{
+    int data;
+    struct Node *next;
+}Node;
+//打印链表
+void printfLinkList(Node* plinkList)
+{
+    //判断是否销毁
+    if(plinkList == NULL)
+    {
+        printf("链表已被销毁！！");
+        return;
+    }
+
+    //判断链表是否为空
+    Node* current = plinkList->next;
+    if(current == NULL)
+    {
+        printf("链表为空！！");
+        return;
+    }
+
+    while(current != NULL)
+    {
+        printf("%d",current->data);
+        if(current->next != NULL) printf("\t");
+        current = current->next;
+    }
+    printf("\n");
+    return;
+}
+
+//销毁链表
+void destroyLinkList(Node* pheader)
+{
+    Node* temp = NULL;
+    while(pheader != NULL)
+    {
+        temp = pheader;
+        pheader = pheader->next;
+        free(temp);
+        temp = NULL;
+    }
+}
+
+Node* createHearNode()
+{
+    Node* header = (Node*)malloc(sizeof(Node));
+    if(header == NULL)
+    {
+        perror("头节点内存分配失败");
+        exit(0);
+    }
+    header->next = NULL;
+    return header;
+}
+
+//6.编写函数在链表头部插入一个新节点，并测试该功能
+void addStartNewNode(Node* pheader, int value)
+{
+    Node* current = pheader;
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if(newNode == NULL)
+    {
+        perror("内存分配失败");
+        return;
+    }
+    newNode->data = value;
+    newNode->next = current->next;
+    current->next = newNode;
+}
+void test_addtopNode()
+{
+    Node* pheader = NULL;
+    pheader = createHearNode();
+    addStartNewNode(pheader,20);
+    addStartNewNode(pheader,30);
+    printfLinkList(pheader);
+
+    destroyLinkList(pheader);    
+}
+
+//5. 编写函数在链表尾部插入一个新节点，并测试该功能
+void addEndNewNode(Node* pheader, int value)
+{
+    Node* current = pheader;
+    while(current->next != NULL)
+    {
+        current = current->next;
+    }
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if(newNode == NULL)
+    {
+        perror("内存分配失败");
+        return;
+    }
+    newNode->data =value;
+    newNode->next = NULL;
+    current->next = newNode;    
+}
+
+void test_addEndNode()
+{
+    Node* pheader = NULL;
+    pheader = createHearNode();
+    addEndNewNode(pheader,20);
+    addEndNewNode(pheader,30);
+    addEndNewNode(pheader,90);
+    printfLinkList(pheader);
+
+    destroyLinkList(pheader);    
+}
+
+//4.编写函数删除链表中指定值的节点（假设值唯一），并测试该功能。
+void deleteLinkListByValue(Node* pheader, int value)
+{
+    while(pheader->next != NULL)
+    {
+        if(pheader->next->data == value)
+        {
+            break;
+        }
+        pheader = pheader->next;
+    }
+    if(pheader->next == NULL)
+    {
+        printf("链表为空！！！\n");
+        return;
+    }
+
+    Node* p = pheader->next;
+    pheader->next = p->next;
+    free(p);
+    p = NULL;
+
+    printf("删除节点成功！！！\n");
+}
+
+void test_deleteNode(){
+    Node* pheader = NULL;
+    pheader = createHearNode();
+    addEndNewNode(pheader,20);
+    addEndNewNode(pheader,30);
+    addEndNewNode(pheader,90);
+    printfLinkList(pheader);
+
+    deleteLinkListByValue(pheader, 90);
+    printfLinkList(pheader);
+
+    destroyLinkList(pheader);
+}
+
+//3.编写函数修改链表中指定位置节点的值，并测试该功能
+void modifyLinkListByValue(Node* pheader, int findValue, int newData)
+{
+    while(pheader->next != NULL)
+    {
+        if(pheader->next->data == findValue)
+        {
+            break;
+        }
+        pheader = pheader->next;
+    }
+    if(pheader->next == NULL)
+    {
+        printf("链表为空！！！\n");
+        return;
+    }
+
+    pheader->next->data = newData;
+    printf("修改节点成功\n");
+    return;
+}
+
+void test_modifyNode(){
+    Node* pheader = NULL;
+    pheader = createHearNode();
+    addEndNewNode(pheader,20);
+    addEndNewNode(pheader,30);
+    addEndNewNode(pheader,90);
+    printfLinkList(pheader);
+
+    modifyLinkListByValue(pheader, 90, 100);
+    printfLinkList(pheader);
+
+    destroyLinkList(pheader);
+}
+
+int main()
+{
+    test_addEndNode();
+    test_addtopNode();
+    test_deleteNode();
+    test_modifyNode();
+    return 0;
+}
+#endif

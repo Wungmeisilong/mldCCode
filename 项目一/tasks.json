@@ -1,0 +1,24 @@
+{
+    "version": "2.0.0",
+    "tasks": 
+    [
+        {
+            "label": "C/C++: g++.exe build active file",                                        //任务的显示名称，会在VS Code的任务列表中显示, 虽然名称提到g++.exe，但实际使用的是gcc.exe（C编译器）
+            "type": "process",                                                                              //表示这是一个外部进程任务, VS Code会启动一个外部程序来执行任务
+            "command": "D:/mingw64/bin/gcc.exe",                                           //指定使用的编译器, 这里使用的是MinGW-w64的GCC编译器, 注意：虽然任务名称提到g++，但实际使用的是gcc（C编译器）
+            "args": [
+                "-fdiagnostics-color=always",                                                       //始终启用彩色诊断输出，让错误信息更易读
+                "-g",                                                                                             //生成调试信息，包含符号表，便于调试器使用
+                "${workspaceFolder}\\*.c",                                                            //编译工作区中所有的.c文件, ${workspaceFolder}是VS Code变量，表示项目根目录,  *.c表示所有C源文件
+                "-o",                                                                                            //指定输出文件名
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"                      //输出文件路径,  ${fileDirname}：当前文件所在目录 , ${fileBasenameNoExtension}：当前文件名（不含扩展名）
+            ],
+            "options": {
+                "cwd": "D:/mingw64/bin/"                                                           //设置编译器的工作目录, 这里设置为MinGW的bin目录，确保能找到相关的库文件
+            },
+            "group": "build",                                                                             //将任务归类为"构建"组, 可以通过快捷键Ctrl+Shift+P → "Tasks: Run Build Task"来执行, 也可以使用快捷键Ctrl+Shift+B直接运行构建任务
+            "detail": "compiler: D:/mingw64/bin/gcc.exe",                                //任务的详细描述信息, 在任务列表中会显示这个描述
+            "problemMatcher": "$gcc"                             //用于解析编译器输出的错误和警告信息, $gcc是VS Code内置的GCC问题匹配器, 会自动将编译错误和警告显示在"问题"面板中, 支持点击错误信息跳转到对应的代码行
+        }
+    ]
+}

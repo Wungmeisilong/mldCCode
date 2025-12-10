@@ -5,6 +5,13 @@
         "string": "cpp",
         "stdio.h": "c",
         "iostream": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "optional": "c",
+        "istream": "c",
+        "system_error": "c",
+        "array": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c"
     }
 }

@@ -150,6 +150,10 @@ void dBlockRead(const char* fileName)
     fclose(fp);
 }
 
+/*
+链表操作
+-----------------------------------------------------------------------------------------
+*/
 //链表的创建
 
 typedef struct Node{
@@ -395,6 +399,81 @@ void testLinkList()
 
     destroyLinkList(pheader);
 }
+
+
+/*
+无哨兵链表
+-----------------------------------------------------------------------------------------
+*/
+Node* createLinkList_NH(int value)
+{
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if(newNode == NULL)
+    {
+        perror("内存分配失败！！");
+        exit(0);//强制退出
+    }
+    newNode->data = value;
+    newNode->next = NULL;
+
+    return newNode;
+}
+void appEndNode_NH(Node** pheader, int value)
+{
+    Node* newNode = createLinkList_NH(value);
+    if(*pheader == NULL)//如果链表为空
+    {
+        *pheader = newNode;
+        return;
+    }
+    Node* current = *pheader;
+    if(current->next != NULL)
+    {
+        current = current->next;
+    }
+    current->next = newNode;
+}
+void printfLinkList_NH(Node* header)
+{
+    Node* current = header;
+    while(current != NULL)
+    {
+        printf("%d ",current->data);
+        current = current->next;
+    }
+    printf("\n");
+}
+
+void freeLinkList_NH(Node* header)
+{
+    Node* current = header;
+    Node* temp = NULL;
+
+    if(current != NULL)
+    {
+        temp = current;
+        current = current->next;
+        free(temp);
+        temp = NULL;
+    }
+}
+
+void testLinkList_NH()
+{
+    Node* newNode = NULL;
+    int n,value;
+    printf("需要输入多少个数？");
+    scanf("%d",&n);
+    for(int i = 0; i < n; i++)
+    {
+        printf("添加第%d个数：",i + 1);
+        scanf("%d",&value);
+        appEndNode_NH(&newNode, value);
+    }
+    printf("打印结果：\n");
+    printfLinkList_NH(newNode);
+    freeLinkList_NH(newNode);
+}
 int main()
 {
     //fCharWrite("fchar.txt");
@@ -420,6 +499,7 @@ int main()
     //Stud std = {"zhangsan",20,90};
     //dBlockWrite("dblock.txt",&std);
     //dBlockRead("dblock.txt");
-    testLinkList();
+    //testLinkList();
+    testLinkList_NH();
     return 0;
 }

@@ -1,0 +1,63 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+ 
+    {
+      "name": "C/C++ Runner: Debug Session",                                                           //这是调试配置的名称，会在VS Code的调试面板中显示, 用户可以通过这个名称选择要使用的调试配置   
+      "type": "cppdbg",                                                                                                //指定使用C/C++调试器, cppdbg是VS Code内置的C/C++调试器类型
+      "request": "launch",                                                                                            //表示启动一个新的程序进行调试, 与之相对的是attach模式，用于附加到已运行的程序                        
+      "args": [],                                                                                                            //传递给被调试程序的命令行参数, 当前为空数组，表示不传递任何参数
+      "stopAtEntry": false,                                                                                            //是否在程序入口点（main函数）处自动停止, false表示不会自动停止，需要手动设置断点             
+      "externalConsole": false,                                                                                     //是否使用外部控制台窗口, false表示使用VS Code内置的集成终端, true会打开一个独立的控制台窗口               
+      "cwd": "${fileDirname}",                                                                                      //程序运行时的工作目录, ${fileDirname}是VS Code的变量，表示当前打开文件所在的目录
+      "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",                           //要调试的可执行文件的完整路径, ${fileBasenameNoExtension}表示当前文件名（不含扩展名）
+      
+                                                                                                                               //MI的含义: MI (Machine Interface) 是GDB提供的一种特殊接口，专门设计用于让其他程序（如IDE、编辑器）能够与GDB进行通信
+      "MIMode": "gdb",                                                                                               //使用GDB（GNU调试器）作为底层调试器, GDB是C/C++程序的标准调试器
+								         //告诉VS Code使用GDB的MI接口模式, 这样VS Code就能通过标准化的方式与GDB通信, 获取断点信息、变量值、调用栈等调试数据
+      "miDebuggerPath": "D:/mingw64/bin/gdb.exe",                                                  //# 改成自己的调试器gdb全路径    GDB调试器的完整安装路径
+								          //这个GDB必须支持MI接口（现代版本的GDB都支持）,VS Code会启动这个GDB进程，并通过MI协议与之通信
+      "setupCommands": [                                                                                           //GDB启动时执行的初始化命令               
+        {
+          "description": "Enable pretty-printing for gdb",                                               
+          "text": "-enable-pretty-printing",                                                                     //启用美化打印功能，让变量显示更友好
+          "ignoreFailures": true                                                                                      //表示即使命令失败也继续调试
+        }
+      ]
+    }
+  ]
+}
+
+
+
+/*
+使用场景
+这个配置适用于：
+	Windows环境下使用MinGW-w64编译的C/C++程序
+	需要调试单个源文件编译出的可执行文件
+	希望在VS Code集成环境中进行调试
+
+注意事项
+	需要确保GDB路径正确指向用户的实际安装位置
+	程序需要先编译生成.exe文件才能调试
+	工作目录和程序路径使用了VS Code变量，会根据当前打开的文件动态变化
+MI的含义
+	MI (Machine Interface) 是GDB提供的一种特殊接口，专门设计用于让其他程序（如IDE、编辑器）能够与GDB进行通信。
+为什么需要MI？
+	传统GDB的问题
+	GDB原本是一个命令行调试器
+	它的输出格式是为人类阅读设计的，包含提示符、状态信息等
+	其他程序很难解析这种格式来获取调试信息
+MI的优势
+	结构化输出：MI使用特定的格式输出信息，便于程序解析
+	无干扰信息：不包含提示符、状态信息等人类友好的内容
+	标准化：有明确的协议规范，便于IDE集成
+"MI"本质上是一个通信协议，让VS Code能够与调试器进行标准化的交互，而不是直接解析调试器的原始输出。
+通信流程
+	VS Code ←→ MI协议 ←→ GDB ←→ 被调试程序
+	VS Code启动GDB进程
+	通过MI协议发送调试命令给GDB
+	GDB执行调试操作（设置断点、查看变量等）
+	GDB通过MI协议返回结构化的调试信息
+	VS Code解析这些信息并显示在界面上
+*/
