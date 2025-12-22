@@ -1,3 +1,4 @@
+
 /*
 使用使用cin,cout完成下面对话框内容：
 
@@ -555,3 +556,247 @@ int main()
 }
 #endif
 
+#if 0
+
+/*
+需求：
+
+定义一个Person类，包含属性：
+姓名，年龄，性别；写好相关的方法，能够构造的时候初始化或者后续修改属性值
+
+定义一个Employee类继承于Person类，包含新的属性：
+职位；写好相关的方法，能够构造的时候初始化或者后续修改属性值，重载＝＝，
+比较规则：当两个对象的姓名，年龄，性别，职位都相等时返回true,否则返回false。
+
+进行相关测试（要求可以打印对象的信息，能够进行对象的比较是否"相等”中等：
+*/
+
+#include <iostream>
+#include <string>
+using namespace std;
+class Person{
+    protected:
+        string name;
+        int age;
+        string sex;
+    public:
+        Person(string n, int a, string s):name(n), age(a), sex(s){}
+        ~Person(){}
+        void setName(string n){
+            name = n;
+        }
+        void setAge(int a)
+        {
+            age = a;
+        }
+        void setSex(string s){
+            sex = s;
+        }
+
+};
+
+class Employee:public Person{
+    private:
+        string position;
+    public:
+        Employee(string n, int a, string s, string p):Person(n, a, s), position(p){}
+        ~Employee(){}
+        void setPosition(string p){
+            position = p;
+        }
+        bool operator==(const Employee& e){
+            return  name == e.name && age == e.age && 
+                    sex == e.sex && position == e.position;
+        }
+};
+int main(){
+    Employee e1 = Employee("zhangsan", 20, "男", "manager");
+    Employee e2 = Employee("lisi", 20, "男", "manager");
+    if(e1 == e2){
+        cout << "e1和e2相等" << endl;
+    }else{
+        cout << "e1和e2不相等" << endl;
+    }
+    e2.setName("zhangsan");
+    if(e1 == e2){
+        cout << "e1和e2相等" << endl;
+    }else{
+        cout << "e1和e2不相等" << endl;
+    }
+
+    return 0;
+}
+#endif
+
+#if 0
+/*
+定义一个复数类Complex，默认初始化为0，重载运算符“＋”，“－”，
+使之能用于复数的加，减运算，运算符重载函数作为Complex类的成员函数。
+编程序，分别求出两个复数之和，差。（复数的输出格式比如：3+2i）
+*/
+#include <iostream>
+using namespace std;
+
+class Complex{
+private:
+    /* data */
+    int real;
+    int imag;
+public:
+    Complex(int r, int i):real(r), imag(i){}
+    ~Complex(){}
+    friend ostream& operator<<(ostream& os,const Complex& c){
+        os << c.real;
+        if(c.imag >= 0)
+        {
+            os << "+";
+        }
+        os<< c.imag << "i";
+        return cout;
+    }
+    Complex operator+(const Complex& c){
+        return Complex(real + c.real, imag + c.imag);
+    }
+    Complex operator-(const Complex& c){
+        return Complex(real - c.real, imag - c.imag);
+    }
+};
+
+int main(){
+    Complex c1 = Complex(1, -2);
+    Complex c2 = Complex(5, 8);
+    cout << "c1: " << c1 << endl;
+    cout << "c2: " << c2 << endl;
+    cout << "c1 + c2: " << c1 + c2 << endl;
+    cout << "c1 - c2: " << c1 - c2 << endl;
+    return 0;
+}
+#endif
+
+#if 1
+
+/*
+)实现一个计算器类，可以计算整数和小数的+,-,*,/。（你需要重载这些运算符）
+*/
+
+#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+class Calculator{
+    private:
+        double da;
+    public:
+        Calculator(double da):da(da){}
+        ~Calculator(){}
+        void print(){ cout << da << endl;}
+        double getValue(){return da;}
+        Calculator operator+(const Calculator& num){
+            return Calculator(da + num.da);
+        }
+        Calculator operator-(const Calculator& num){
+            return Calculator(da - num.da);
+        }
+        Calculator operator*(const Calculator& num){
+            return Calculator(da * num.da);
+        }
+        Calculator operator/(const Calculator& num){
+            if(num.da == 0.0){
+                throw invalid_argument("Error:除数不能为零！\n");
+            }
+            return Calculator(da / num.da);
+        }
+};
+
+int main(){
+    Calculator ca1 = Calculator(1);
+    Calculator ca2 = Calculator(1);
+    Calculator ca3 = Calculator(0);
+    for(int i = 0; i < 4; i++){
+        cout<<"-----第" << i+1 << "次-----" <<endl;
+        ca1 = Calculator(i+4);
+        ca2 = Calculator(i*10);
+        switch (i%4)
+        {
+        case 0:
+            ca3 = ca1 + ca2;
+            break;
+        case 1:
+            ca3 = ca1 - ca2;
+            break;
+        case 2:
+            ca3 = ca1 * ca2;
+            break;
+        case 3:
+            ca3 = ca1 / ca2;
+            break;
+        default:
+            break;
+        }
+        cout << ca3.getValue()<< endl;
+    }
+    
+    return 0;
+}
+#endif
+
+#if 0
+
+/*
+自定义一个字符串类MyString，用来存放不定长的字符串，
+重载运算符“＝＝”、“+”，用于两个字符串的内容比较，初值自拟。
+测试比较两个字符串内容是否相同。
+【3分：MyString内部结构1分，运算符重载正确1分，能存放动态字符串，主函数测试正确1分】
+*/
+
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class MyString{
+    private:
+        char* dataBuffer;
+    public:
+        MyString(const char* data){
+            dataBuffer = new char[strlen(data)+1];
+            strcpy(dataBuffer, data);
+        }
+        MyString(const char* data1, const char* data2){
+            int n = strlen(data2);
+            dataBuffer = new char[strlen(data1) + strlen(data2) +1];
+            strcpy(dataBuffer, data1);
+            strncat(dataBuffer,data2,n);
+        }
+
+        MyString& operator=(const MyString& ms){
+            if( this != &ms) return *this;
+            delete[] dataBuffer;
+            dataBuffer = new char[strlen(ms.dataBuffer)+1];
+
+            return *this;
+        }
+
+        ~MyString(){
+            delete[] dataBuffer;
+        }
+        bool operator==(const MyString& ms){
+            if(strcmp(dataBuffer, ms.dataBuffer) !=0){
+                return true;
+            }
+            return false;
+        }
+        MyString operator+(const MyString& ms){
+            return MyString(dataBuffer,ms.dataBuffer);
+        }
+        friend ostream& operator<<(ostream& os, const MyString& ms){
+            return os<< ms.dataBuffer;
+        }
+
+};
+int main(){
+    MyString ms = MyString("你好");
+    MyString ms1 = MyString(",张三");
+    cout<< ms + ms1 << endl;
+    return 0;
+}
+#endif
