@@ -321,7 +321,7 @@ int main(){
 }
 #endif
 
-#if 1
+#if 0
 /*
 定义一个人员类Person，包含数据成员：姓名、ID。在此基础上派生出学生类Student(增加成绩属性)和老师类Teacher(增加教龄)，主函数测试实现对学生和老师信息的输入输出。
 */
@@ -368,3 +368,190 @@ int main(){
     return 0;
 }
 #endif
+
+#if 0
+/*
+设计一个学生类，要求该类有姓名、成绩、性别三个属性以及自我介绍的成员函数。（要求必须要有构造函数、析构函数、成员姓名是char*类型存储在堆空间）
+*/
+#include <iostream>
+#include <cstring>
+#include <string>
+using namespace std;
+
+class Student{
+    private:
+        char* name;
+        float score;
+        string sex;
+    public:
+        Student(char* n,float s, string se){
+            name = new char[strlen(n)+1];
+            strcpy(name, n);
+            score = s;
+            sex = se;
+        }
+        Student(const Student& other):score(other.score), sex(other.sex){
+            name = new char[strlen(other.name)+1];
+            strcpy(name, other.name);
+        }
+        Student& operator=(const Student& other){
+            if(this != &other) return *this;
+            delete[] name;
+            name = new char[strlen(other.name)+1];
+            strcpy(name, other.name);
+            score = other.score;
+            sex = other.sex;
+
+            return *this;
+        }
+        ~Student(){
+            delete[] name;
+        }
+        void introduce(){
+            cout << "姓名：" << name << ",成绩：" << score << ",性别：" << sex << endl;
+        }
+};
+
+int main(){
+    Student s = Student("zhangsan", 100, "男");
+    s.introduce();
+}
+#endif
+
+#if 0
+/*
+练习：定义一个员工类Employee
+
+要求：1，有工行，名字，员工总人数（static）
+
+      2，构造函数
+
+      3，输出函数print，输出工号，姓名
+
+      4，静态成员函数void count();负责输出总人数；
+
+      5，在main函数中定义3个员工，每构造一个对象，打印姓名和工号，总人数
+*/
+#include <iostream>
+
+using namespace std;
+
+class Employee{
+    private:
+        int id;
+        string name;
+        static int countNumber;
+    public:
+        Employee(string n):name(n),id(100){
+            countNumber++;
+            id += countNumber;
+            print();
+            count();
+        }
+        ~Employee(){}
+        static void count(){
+            cout << "员工总人数：" << countNumber << endl;
+        }
+        void print(){
+            cout << "工号：" << id << ",姓名：" << name << endl;
+        }
+};
+int Employee::countNumber = 0; //静态成员变量必须在类外初始化
+
+int main(){
+    Employee e1 = Employee("张三");
+    Employee e2 = Employee("李四");
+    Employee e3 = Employee("王五");
+    return 0;
+}
+#endif
+
+#if 0
+/*
+定义一个交通工具类（Vehicle）属性：速度(speed)，体积(size)  
+
+函数：构造函数初始化speed和size,
+
+移动：move()，
+
+设置速度setSpeed(int speed)，加速speedUp(),
+
+减速speedDown()
+
+最后在main()中实例化一个交通工具对象，并通过方法给它初始化speed,size的值，
+并且通过打印出来。另外，调用加速，减速的方法对速度进行改变。
+【4分，构造函数初始 化成员1分，方法的定义1分，主函数测试+代码规范1分】
+*/
+
+#include <iostream>
+
+using namespace std;
+class Vehicle{
+    private:
+        float speed;
+        float size;
+    public:
+        Vehicle(float sp, float si):speed(sp), size(si){
+            cout << "速度：" << speed << ",体积：" << size << endl;
+        }
+        ~Vehicle(){}
+        void move(){
+            cout << "移动中..." << endl;
+        }
+        void setSpeed(float sp){
+            speed = sp;
+            cout << "速度设置为：" << speed << endl;
+        }
+        void speedUp(){
+            speed += 10;
+            cout << "加速后速度为：" << speed << endl;
+        }
+        void speedDown(){
+            speed -= 10;
+            cout << "减速后速度为：" << speed << endl;
+        }
+};
+int main(){
+    Vehicle v = Vehicle(100.0, 2000.0);
+    v.move();
+    v.setSpeed(200.0);
+    v.speedUp();
+    v.speedDown();
+    return 0;
+
+}
+#endif
+
+#if 0
+
+/*
+编写程序，调用传递引用的参数，实现两个字符串变量的交换。
+
+例如开始：
+char* ap = "hello";
+char* bp = "how are you?";
+交换的结果使得ap和bp指向的内容分别为：
+ap: "how are you?"
+bp: "hello"
+*/
+#include <iostream>
+using namespace std;
+
+void swap(const char*& a, const char*& b){
+    const char* temp = a;
+    a = b;
+    b = temp;
+}
+int main()
+{
+    const char* ap = "hello";
+    const char* bp = "how are you?";
+    cout << "ap: " << ap << endl;
+    cout << "bp: " << bp << endl;
+    swap(ap, bp);
+    cout << "ap: " << ap << endl;
+    cout << "bp: " << bp << endl;
+    return 0;
+}
+#endif
+
