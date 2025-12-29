@@ -642,7 +642,8 @@ private:
     /* data */
     int real;
     int imag;
-public:
+public: 
+    Complex():rel{},imag{}{}
     Complex(int r, int i):real(r), imag(i){}
     ~Complex(){}
     friend ostream& operator<<(ostream& os,const Complex& c){
@@ -655,6 +656,10 @@ public:
         return cout;
     }
     Complex operator+(const Complex& c){
+        // Complex temp;
+        // temp.real = real + c.real;
+        // temp.imag = imag + c.imag;
+        // return temp;
         return Complex(real + c.real, imag + c.imag);
     }
     Complex operator-(const Complex& c){
@@ -673,7 +678,7 @@ int main(){
 }
 #endif
 
-#if 1
+#if 0
 
 /*
 )实现一个计算器类，可以计算整数和小数的+,-,*,/。（你需要重载这些运算符）
@@ -685,9 +690,9 @@ using namespace std;
 
 class Calculator{
     private:
-        double da;
+        double da;//包含整数和小数
     public:
-        Calculator(double da):da(da){}
+        Calculator(double da = 0.0):da(da){}//适配无参构造函数
         ~Calculator(){}
         void print(){ cout << da << endl;}
         double getValue(){return da;}
@@ -756,10 +761,24 @@ using namespace std;
 class MyString{
     private:
         char* dataBuffer;
+        int length;
     public:
+    // 无参构造函数
+        MyString():length{}{
+            dataBuffer = new char[1];
+            dataBuffer[0] = '\0';
+        }
         MyString(const char* data){
-            dataBuffer = new char[strlen(data)+1];
+            length = strlen(data);
+            dataBuffer = new char[length+1];
             strcpy(dataBuffer, data);
+        }
+
+        //拷贝构造函数，实现深拷贝；
+        MyString(const MyString& ms){
+            length = ms.length;
+            dataBuffer = new char(length + 1);
+            strcpy(dataBuffer,ms.dataBuffer);
         }
         MyString(const char* data1, const char* data2){
             int n = strlen(data2);
@@ -767,12 +786,14 @@ class MyString{
             strcpy(dataBuffer, data1);
             strncat(dataBuffer,data2,n);
         }
-
+        // 重载运算符= ,实现深拷贝赋值；
         MyString& operator=(const MyString& ms){
-            if( this != &ms) return *this;
-            delete[] dataBuffer;
-            dataBuffer = new char[strlen(ms.dataBuffer)+1];
-
+            if( this != &ms) {
+                delete[] dataBuffer;
+                length = ms.length;
+                dataBuffer = new char[length + 1];
+                strcpy(dataBuffer, ms.dataBuffer);
+            }
             return *this;
         }
 
@@ -780,13 +801,20 @@ class MyString{
             delete[] dataBuffer;
         }
         bool operator==(const MyString& ms){
-            if(strcmp(dataBuffer, ms.dataBuffer) !=0){
-                return true;
-            }
-            return false;
+            // if(strcmp(dataBuffer, ms.dataBuffer) !=0){
+            //     return true;
+            // }
+            // return false;
+            return strcmp(dataBuffer, ms.dataBuffer) == 0;
         }
         MyString operator+(const MyString& ms){
-            return MyString(dataBuffer,ms.dataBuffer);
+            // return MyString(dataBuffer,ms.dataBuffer);
+            char* newData = new char[length +ms.length + 1 ];
+            strcpy(newData, dataBuffer);
+            strcat(newData, ms.dataBuffer);
+            MyString re{newData};
+            delete[] newData;
+            return re;
         }
         friend ostream& operator<<(ostream& os, const MyString& ms){
             return os<< ms.dataBuffer;
@@ -796,7 +824,422 @@ class MyString{
 int main(){
     MyString ms = MyString("你好");
     MyString ms1 = MyString(",张三");
-    cout<< ms + ms1 << endl;
+    MyString ms2{ms};
+    if(ms == ms2){
+        cout << "ms 和 ms2 内容相同" << endl;
+    }
+    else{
+        cout << "ms 和 ms2 内容不相同" << endl;
+    }
+
+    MyString ms3 = ms + ms1;
+    cout << "ms3 内容是：" << ms3 << endl;
     return 0;
 }
+#endif
+
+#if 0
+
+/*
+设计一个雇员Employee类，成员属性有:姓名、职工ID，定义工资发放的虚方法pay(），有技术人员类（Technician）、
+销售人员（SalesMan）分别继承至雇员类，对基类的虚方法进行重定义（函数的实现只需区别不同员工的工资发放方式即可），
+设计全局的函数getSalary(Emplyyee*);分别测试技术人员和销售人员的工资发放。
+【4分，属性+初始化1分，继承1分，函数重写1分，代码规范+测试正确1分】
+*/
+
+#include <iostream>
+#include <string>
+using namespace std;
+class Employee{
+    protected:
+        string name;
+        int id;
+    public:
+        Employee():name{}, id{}{}
+        Employee(string n, int i):name(n), id(i){}
+        virtual void pay() =  0;
+        virtual ~Employee(){}
+
+};
+
+class Technician:public Employee{
+    public:
+        Technician():Employee(){}
+        Technician(string n ,int i):Employee(n,i){}
+        virtual void pay()override{
+            cout << "技术人员\n姓名：" << name << "\nID:" << id << "\n工资：3000元" <<endl;
+        }
+        virtual ~Technician(){}
+};
+
+class SalesMan:public Employee{
+    public:
+        SalesMan():Employee(){}
+        SalesMan(string n, int i):Employee(n, i){}
+        virtual void pay()override{
+            cout<< "销售人员\n姓名：" << name << "\nID:" << id << "\n工资：2000元" <<endl;
+        }
+        virtual ~SalesMan(){}
+};
+
+class showSalary{
+    public:
+        showSalary(){}
+        ~showSalary(){}
+        void getSalary(Employee* e){
+            e->pay();
+        }
+};
+
+int main(){
+    showSalary ss;
+    Technician t = Technician("张三", 1);
+    SalesMan s = SalesMan("李四", 2);
+    ss.getSalary(&t);
+    ss.getSalary(&s);
+    return 0;
+}
+#endif
+
+#if 0
+/*
+自定义抽象类表示图形（Figure）
+要求：
+1、有纯虚函数onDraw(),该函数无参无返回值;
+自定义类表示矩形（Rectangle）
+
+要求：
+1、有成员属性LTpoint（左上角坐标，Point），RBpoint（右下角坐标，Point）
+2、将成员属性LTpoint，RBpoint设为私有属性，并提供公开的get，set函数。
+3、有成员函数area，能够计算矩形对象的面积（通过LTpoint和RBpoint获取矩形的长和宽）。
+area的函数原型：int Rectangle::area();
+4、改写Figure的onDraw函数，在函数体内打印矩形的长和宽。
+5、有合理的构造函数，必须在构造函数中初始化LTpoint和RBpoint。
+*/
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+struct Point{
+    int x;
+    int y;
+    Point():x{}, y{}{}
+    Point(int a, int b):x(a), y(b){}
+};
+
+class Figure{
+    public:
+        virtual void onDraw() = 0;
+        virtual ~Figure(){}
+};
+
+class Rectangle:public Figure
+{
+private:
+    Point LTpoint;
+    Point RBpoint;
+public:
+    Rectangle():LTpoint{}, RBpoint{}{};
+    Rectangle(Point lt, Point rb):LTpoint(lt), RBpoint(rb){};
+    Point getLTpoint(){
+        return LTpoint;
+    }
+    void setLTpoint(Point lt){
+        LTpoint = lt;
+    }
+    Point getRBpoint(){
+        return RBpoint;
+    }
+    void setRBpoint(Point rb){
+        RBpoint = rb;
+    }  
+    int area(){
+        return abs(RBpoint.x - LTpoint.x) * abs(RBpoint.y - LTpoint.y);
+    }
+    virtual void onDraw()override{
+        cout << "绘制矩形，长：" << abs(RBpoint.x - LTpoint.x) << ",宽：" << abs(RBpoint.y - LTpoint.y) << endl;
+    }
+    ~Rectangle(){}
+};
+
+class Painter{
+    public:
+        Painter(){}
+        ~Painter(){}
+        void draw(Figure& fig){
+            fig.onDraw();
+        }
+};
+int main(){
+    Painter pa;
+    Rectangle rect{Point{1,2},Point{8,9}};
+    pa.draw(rect);
+    cout << "矩形面积是：" << rect.area() << endl;
+
+}
+#endif
+
+#if 0
+/*
+定义一个人员类Person，包含数据成员：姓名、ID、性别和用于输入输出的虚函数。
+在此基础上派生出学生类Student(增加成绩属性)和老师类Teacher(增加教龄)，
+并实现对学生和老师信息的输入输出。测试创建人员对象数组（两个人员，一个学生，一个老师），实现多态。
+【4分，继承1分，继承+虚函数重写2分，主函数测试+代码规范1分】
+*/
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Person{
+    protected:
+        string name;
+        int ID;
+        string gender;
+    public:
+        Person():name(" "), ID(0),gender(" "){}
+        Person(string n, int i, string g):name(n), ID(i),gender(g){}
+        virtual void showInfo() = 0;
+        virtual void inputInfo() = 0;
+        virtual ~Person(){}
+
+};
+
+class Student:public Person{
+    private:
+        float score;
+    public:
+        Student():Person(),score(0.0f){}
+        Student(string n, int i, string g, float s):Person(n, i, g),score(s){}
+        virtual void showInfo()override{
+            cout << "学生信息\n学号：" << ID << "，姓名：" << name << "，性别：" << gender << "，成绩：" << score << endl;
+        }
+        virtual void inputInfo(){
+            cout<< "请输入学生信息\n姓名：";
+            cin >> name;
+            cout << "学号：";
+            cin >> ID;
+            cout << "性别：";
+            cin >> gender;
+            cout << "成绩：";
+            cin >> score;
+        }
+};
+
+class Teacher:public Person{
+    private:
+        int teachAge;
+    public:
+        Teacher():Person(), teachAge(0){}
+        Teacher(string n, int i, string g, int t):Person(n, i, g), teachAge(t){}
+        virtual void showInfo()override{
+            cout << "教师信息\n工号：" << ID << "，姓名：" << name << ",性别：" << gender << ",教龄：" << teachAge << endl;
+        }
+        virtual void inputInfo(){
+            cout<< "请输入教师信息\n姓名：";
+            cin >> name;
+            cout << "工号：";
+            cin >> ID;
+            cout << "性别：";
+            cin >> gender;
+            cout << "教龄：";
+            cin >> teachAge;
+        }
+};
+
+class PersonInfo{
+    public:
+        void showPersonInfo(Person* p){
+            p->showInfo();
+        }
+        void inputPersonInfo(Person* p){
+            p->inputInfo();
+        }
+
+};
+
+int main(){
+    PersonInfo pi;
+    Person* persons[2];
+    persons[0] = new Student();
+    persons[1] = new Teacher();
+    for(int i=0; i<2; i++){
+        pi.inputPersonInfo(persons[i]);
+    }
+    for(int i=0; i<2; i++){
+        pi.showPersonInfo(persons[i]);
+        delete persons[i];
+    }
+}
+#endif
+
+#if 0
+/*
+已知String的定义如下：
+
+class String{
+public:
+String(const char *str = NULL);  // 通用构造函数
+String(const String &another);  // 拷贝构造函数
+~String();  // 析构函数
+String& operater =(const String &rhs); // 赋值函数
+private:
+char* m_data;  // 用于保存字符串
+};
+
+写出类的成员函数实现。【4分：构造函数和析构函数1分，拷贝构造函数1分，赋值函数1分，代码规范，测试正确+代码规范1分】
+*/
+
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class String{
+public:
+    String(const char *str = NULL);  // 通用构造函数
+    String(const String &another);  // 拷贝构造函数
+    ~String();  // 析构函数
+    String& operator=(const String& rhs)// 赋值函数
+    {
+        if(this != &rhs){
+            delete[] m_data;
+            m_data = new char[strlen(rhs.m_data) + 1];
+            strcpy(m_data, rhs.m_data);
+        }
+        return *this;
+    }
+    friend ostream& operator<<(ostream& os, const String& str){
+        return os << str.m_data;
+    }
+private:
+    char* m_data;  // 用于保存字符串
+};
+String::String(const char *str){
+    if(str != NULL){
+        m_data = new char[strlen(str) + 1];
+        strcpy(m_data, str);
+    }
+    else{
+        m_data = new char[1];
+        m_data[0] = '\0';
+    }
+}
+String::String(const String &another){
+        m_data = new char[strlen(another.m_data) + 1];
+        strcpy(m_data, another.m_data);
+}
+
+String::~String(){
+    delete[] m_data;
+}
+
+int main(){
+    String str1{"1234"};
+    String str2 = str1; //调用拷贝构造函数
+    String str3;
+    str3 = str1; //调用赋值函数
+    cout << "str1: " << str1 << endl;
+    cout << "str2: " << str2 << endl;  
+    cout << "str3: " << str3 << endl;
+    return 0;
+}
+#endif
+
+#if 0
+/*
+1.定义一个正方形square，边长为私有，有构造函数，有个成员函数double area();还有个void copy(square s)；
+要求：
+1:在main函数中，定义两个对象，s1(3),s2(5)
+2:通过copy函数，把s2拷贝给s1，并打印s1前后的面积
+3:在copy函数中使用this指针实现，并能判断是否是拷贝对象本身，如果是本身则直接返回，不进行拷贝动作。
+4:area函数负责计算并输出面积
+*/
+#include  <iostream>
+using namespace std;
+
+class Square{
+    private:
+        int side;
+    public:
+        Square(int s = 0):side(s){}
+        double area(){
+            return side * side;
+        }
+        void copy(Square s){
+            if(this == &s){
+                return;
+            }
+            side = s.side;
+        }
+};
+
+int main(){
+    Square s1(3), s2(5);
+    cout << "s1 area: " << s1.area() << endl;
+    cout << "s2 area: " << s2.area() << endl;
+    s1.copy(s2);
+    cout << "s1 area: " << s1.area() << endl;
+    cout << "s2 area: " << s2.area() << endl;
+}
+
+#endif
+
+#if 0
+/*
+设计一个家电类（appliances），家电类中有方法改变温度方法changedTemp(),
+设计冷风机（AirColor）、热风机(AirHeater)分别继承至家电类,
+重写改变温度的方法（冷风机的实现为降低温度，热风机的实现为升高温度），
+有空调类，继承至冷风机和热风机，设计升高温度的方法tempUp()和降低温度的方法tempDown()，
+设计一个全局变量温度为默认28°C，通过空调调节温度的高低。
+（注意：空调类中调节温度的方法应该是分别调用冷风机和热风机中的方法实现改的）
+*/
+
+#include <iostream>
+using namespace std;
+
+int temp = 28;
+
+class Appliances{
+    public:
+        virtual void changedTemp() = 0;
+        virtual ~Appliances(){}
+};
+class AirColor:public Appliances{
+    public:
+        virtual void changedTemp()override{
+            cout << "降低温度" << endl;
+        }
+};
+class AirHeater:public Appliances{
+    public:
+        virtual void changedTemp()override{
+            cout << "升高温度" << endl;
+        }
+};
+class AirConditioner:public AirColor, public AirHeater{
+    public:
+        void tempUp(){
+            AirHeater::changedTemp();
+            cout << "当前温度：" << ++temp << "°C" << endl;
+        }
+        void tempDown(){
+            AirColor::changedTemp();
+            cout << "当前温度：" << --temp << "°C" << endl;
+        }
+};
+int main(){
+    AirConditioner ac;
+    ac.tempUp();
+
+    ac.tempUp();
+    ac.tempUp();
+    ac.tempDown();
+}
+#endif
+
+#if 1
+/*
+用C++编写单例设计模式类 Singleton,定义函数void doSomething(),在此函数中打印”Hello Singleton”,编写测试代码，调用doSomething函数
+*/
+
 #endif
